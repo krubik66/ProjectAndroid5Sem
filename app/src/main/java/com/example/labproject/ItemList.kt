@@ -151,12 +151,6 @@ fun AddUnitDialog(
     val (selectedStrength, setSelectedStrength) = remember { mutableStateOf(strength[0]) }
     var danger by remember { mutableStateOf(false) }
 
-    onEvent(ListItemEvent.SetName("Nameless"))
-    onEvent(ListItemEvent.SetSpec("None"))
-    onEvent(ListItemEvent.SetType("Lich"))
-    onEvent(ListItemEvent.SetDanger(false))
-    onEvent(ListItemEvent.SetStrength(0f))
-
     AlertDialog(
         modifier = modifier,
         title = { Text(text = "Add unit") },

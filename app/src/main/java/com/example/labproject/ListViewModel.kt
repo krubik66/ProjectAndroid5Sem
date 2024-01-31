@@ -67,7 +67,6 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
                 }
             }
             is ListItemEvent.EditItem -> {
-                // Assuming you have a selectedTripId variable in TripState to store the ID of the trip being edited
                 val selectedItem = event.item
 
                 val existingItem = _listItems.value.find { it == selectedItem }
@@ -108,11 +107,20 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
                 }
             }
             ListItemEvent.SaveItem -> {
-                val name = state.value.text_name
-                val spec = state.value.text_spec
-                val strength = state.value.item_strength
-                val type = state.value.item_type
+                var name = state.value.text_name
+                var spec = state.value.text_spec
+                var strength = state.value.item_strength
+                var type = state.value.item_type
                 val danger = state.value.dangerous
+
+                if(name == "")
+                    name = "Nameless"
+                if(spec == "")
+                    spec = "None"
+                if(strength == -1f)
+                    strength = 1f
+                if(type == "")
+                    type = "Lich"
 
                 val item = DatabaseItem(name, spec, strength, type, danger)
                 viewModelScope.launch {
