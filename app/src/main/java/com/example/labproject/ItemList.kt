@@ -38,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -309,8 +310,8 @@ fun mySpinner(
     setSelected: (selected: String) -> Unit,
     onEvent: (ListItemEvent) -> Unit
 ) {
-    var spinnerText by remember { mutableStateOf(selectedOption) }
-    var my_expanded by remember { mutableStateOf(false) }
+    var spinnerText by rememberSaveable { mutableStateOf(selectedOption) }
+    var my_expanded by rememberSaveable { mutableStateOf(false) }
 
     Row {
         Text(

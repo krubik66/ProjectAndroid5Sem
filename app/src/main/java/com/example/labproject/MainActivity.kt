@@ -76,6 +76,12 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val items = listOf<NavigationItem>(
                     NavigationItem(
+                        title = "Swipe",
+                        selectedIcon = Icons.Filled.AccountBox,
+                        unselectedIcon = Icons.Filled.AccountBox,
+                        route = Screen.Swipe.route,
+                    ),
+                    NavigationItem(
                         title = "Home",
                         selectedIcon = Icons.Filled.Home,
                         unselectedIcon = Icons.Filled.Home,
@@ -86,12 +92,6 @@ class MainActivity : ComponentActivity() {
                         selectedIcon = Icons.Filled.Menu,
                         unselectedIcon = Icons.Filled.Menu,
                         route = Screen.List.route,
-                    ),
-                    NavigationItem(
-                        title = "Swipe",
-                        selectedIcon = Icons.Filled.AccountBox,
-                        unselectedIcon = Icons.Filled.AccountBox,
-                        route = Screen.Swipe.route,
                     ),
                 )
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -160,6 +160,29 @@ class MainActivity : ComponentActivity() {
                                 },
                             )
                         },
+                        bottomBar = {
+                            BottomAppBar {
+                                items.forEachIndexed { index, item ->
+                                    NavigationBarItem(
+                                        label = { Text(item.title) },
+                                        selected = index == selectedIdemIndex,
+                                        onClick = {
+                                            navController.navigate(item.route)
+                                            selectedIdemIndex = index
+                                            scope.launch { drawerState.close() }
+                                        },
+                                        icon = {
+                                            Icon(
+                                                imageVector = if (index == selectedIdemIndex) item.selectedIcon else item.unselectedIcon,
+                                                contentDescription = item.title
+                                            )
+                                        },
+                                        modifier = Modifier
+                                            .padding(NavigationDrawerItemDefaults.ItemPadding)
+                                    )
+                                }
+                            }
+                        }
                     )
                     {
                         NavHost(navController = navController, startDestination = "home") {
