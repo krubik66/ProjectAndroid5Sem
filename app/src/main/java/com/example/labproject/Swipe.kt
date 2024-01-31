@@ -54,7 +54,7 @@ fun Swipe(navController: NavController, mainViewModel: MainViewModel){
                         painter = painterResource(id = photos[page]),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(250.dp, 250.dp)
+                        modifier = Modifier.size(220.dp, 220.dp)
                     )
 
                 }
@@ -63,7 +63,7 @@ fun Swipe(navController: NavController, mainViewModel: MainViewModel){
             TextField(value = top, onValueChange = {
                 top = it
             })
-            Text(text = "Ustaw Pierwszy tekst poniżej")
+            Text(text = "Ustaw pierwszy tekst poniżej")
             TextField(value = under1, onValueChange = {
                 under1 = it
             })

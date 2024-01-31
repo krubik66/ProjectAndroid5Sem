@@ -94,9 +94,9 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
                     it.copy(
                         text_name = "",
                         text_spec = "",
-                        item_strength = 0f,
+                        item_strength = -1f,
                         dangerous = false,
-                        item_type = "Lich",
+                        item_type = "",
                         isChecked = false
                     )
                 }
@@ -122,8 +122,8 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
                     it.copy(
                         text_name = "",
                         text_spec = "",
-                        item_strength = 0f,
-                        item_type = "Lich",
+                        item_strength = -1f,
+                        item_type = "",
                         dangerous = false,
                         isChecked = false,
                         isNew = false,
