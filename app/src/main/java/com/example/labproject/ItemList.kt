@@ -129,12 +129,53 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
                         )
 
                     }
+                    var showDialog by remember {
+                        mutableStateOf(false)
+                    }
                     IconButton(onClick = {
-                        onEvent(ListItemEvent.DeleteItem(item))
+                        showDialog = true
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete unit"
+                            contentDescription = "Delete"
+                        )
+                    }
+
+                    if(showDialog) {
+                        AlertDialog(
+                            title = { Text(text = "Delete") },
+                            text = {
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                ) {
+                                    Text(
+                                        text = "Czy na pewno chcesz usunąć?",
+                                    )
+
+                                }
+                            },
+                            onDismissRequest = {
+                                showDialog = false
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false
+                                        onEvent(ListItemEvent.DeleteItem(item))
+                                    }
+                                ) {
+                                    Text("Confirm")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false
+                                    }
+                                ) {
+                                    Text("Dismiss")
+                                }
+                            }
                         )
                     }
                     Checkbox(
@@ -248,9 +289,6 @@ fun EditUnitDialog(
     val (selectedOption, setSelectedOption) = remember { mutableStateOf(type) }
     val strength = listOf("1","2","3","4","5")
     val (selectedStrength, setSelectedStrength) = remember { mutableStateOf(item_strength.toString()) }
-    val checked by remember {
-        mutableStateOf(state.listItems[id].isChecked)
-    }
 
     AlertDialog(
         modifier = modifier,
@@ -281,7 +319,6 @@ fun EditUnitDialog(
                     },
                     placeholder = { Text(text = "Specifics") },
                 )
-                Text(text = checked.toString())
                 Text(
                     text = "Dangerous",
                 )
@@ -390,11 +427,57 @@ fun deleteButton(
     onEvent: (ListItemEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button(onClick = { onEvent(ListItemEvent.DeleteChecked) }) {
-        Icon(
-            imageVector = Icons.Default.Delete,
-            contentDescription = "Delete Checked"
-        )
+    Column {
+        var showDialog by remember {
+            mutableStateOf(false)
+        }
+        Button(onClick = {
+            showDialog = true
+        }) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete Checked"
+            )
+        }
+
+        if(showDialog) {
+            AlertDialog(
+                modifier = modifier,
+                title = { Text(text = "Delete") },
+                text = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(
+                            text = "Czy na pewno chcesz usunąć?",
+                        )
+
+                    }
+                },
+                onDismissRequest = {
+                    showDialog = false
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showDialog = false
+                            onEvent(ListItemEvent.DeleteChecked)
+                        }
+                    ) {
+                        Text("Confirm")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            showDialog = false
+                        }
+                    ) {
+                        Text("Dismiss")
+                    }
+                }
+            )
+        }
     }
 }
 

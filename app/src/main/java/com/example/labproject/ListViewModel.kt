@@ -103,6 +103,7 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
             }
 
             ListItemEvent.DeleteChecked -> {
+
                 viewModelScope.launch{ dao.deleteChecked() }
             }
 
