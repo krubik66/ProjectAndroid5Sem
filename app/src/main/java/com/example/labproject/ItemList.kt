@@ -204,8 +204,8 @@ fun AddUnitDialog(
                                       },
                     modifier = Modifier.size(40.dp)
                 )
-                mySpinner(label ="Strength", choices = strength, selectedOption = selectedStrength, setSelected = setSelectedStrength, onEvent = onEvent)
-                mySpinner(label = "Type", choices =choices , selectedOption = selectedOption, setSelected = setSelectedOption, onEvent = onEvent)
+                mySpinner(label ="strength", choices = strength, selectedOption = selectedStrength, setSelected = setSelectedStrength, onEvent = onEvent)
+                mySpinner(label = "type", choices =choices , selectedOption = selectedOption, setSelected = setSelectedOption, onEvent = onEvent)
             }
         },
         onDismissRequest = {
