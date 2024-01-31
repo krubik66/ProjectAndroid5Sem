@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
@@ -18,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.labproject.ui.theme.LabProjectTheme
 import kotlinx.coroutines.launch
@@ -26,9 +26,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -96,34 +97,28 @@ class MainActivity : ComponentActivity() {
                 )
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
-                var selectedIdemIndex by rememberSaveable {
-                    mutableStateOf(0)
-                }
+                var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
                 ModalNavigationDrawer(
                     drawerContent = {
                         ModalDrawerSheet {
                             Text(
                                 "Projekt Android\nJan Staręga",
-                                fontSize = 20.sp,
                                 modifier = Modifier
-                                    .padding(top = 20.dp)
-                                    .align(
-                                        Alignment.CenterHorizontally
-                                    )
+                                    .align(Alignment.CenterHorizontally)
                             )
                             Spacer(modifier = Modifier.height(20.dp))
                             items.forEachIndexed { index, item ->
                                 NavigationDrawerItem(
                                     label = { Text(item.title) },
-                                    selected = index == selectedIdemIndex,
+                                    selected = index == selectedItemIndex,
                                     onClick = {
                                         navController.navigate(item.route)
-                                        selectedIdemIndex = index
+                                        selectedItemIndex = index
                                         scope.launch { drawerState.close() }
                                     },
                                     icon = {
                                         Icon(
-                                            imageVector = if (index == selectedIdemIndex) item.selectedIcon else item.unselectedIcon,
+                                            imageVector = if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
                                             contentDescription = item.title
                                         )
                                     },
@@ -158,22 +153,27 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 },
-                            )
+                                actions = {
+                                    if(selectedItemIndex == 2) {
+                                        deleteButton(state = state, onEvent = dbViewModel::onEvent)
+                                    }
+                                }
+                                )
                         },
                         bottomBar = {
                             BottomAppBar {
                                 items.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         label = { Text(item.title) },
-                                        selected = index == selectedIdemIndex,
+                                        selected = index == selectedItemIndex,
                                         onClick = {
                                             navController.navigate(item.route)
-                                            selectedIdemIndex = index
+                                            selectedItemIndex = index
                                             scope.launch { drawerState.close() }
                                         },
                                         icon = {
                                             Icon(
-                                                imageVector = if (index == selectedIdemIndex) item.selectedIcon else item.unselectedIcon,
+                                                imageVector = if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
                                                 contentDescription = item.title
                                             )
                                         },

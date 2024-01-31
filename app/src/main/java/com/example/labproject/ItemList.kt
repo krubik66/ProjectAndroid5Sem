@@ -18,7 +18,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -33,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -48,13 +52,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListItemEvent) -> Unit) {
 
     var selectedItemPosition by remember { mutableStateOf(-1) }
-
 
     Scaffold(
         floatingActionButton = {
@@ -69,12 +74,13 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
                 )
             }
         },
+
         modifier = Modifier.padding(16.dp)
     ) { padding ->
         if(state.isNew){
             AddUnitDialog(state = state, onEvent = onEvent)
         }
-        if(state.isChecked){
+        if(state.isBeingEdited){
             EditUnitDialog(state = state, onEvent = onEvent, id = selectedItemPosition)
         }
         LazyColumn(
@@ -99,6 +105,7 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
                         }
 
                 ){
+                    var checked by remember { mutableStateOf(item.isChecked) }
                     Image(
                         painter = when(item.item_type){
                             "Lich" -> painterResource(id = R.drawable.playericon)
@@ -113,7 +120,7 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
                         modifier = Modifier.weight(1f),
                     ) {
                         Text(
-                            text = "${item.text_name}",
+                            text = item.text_name,
                             fontSize = 20.sp,
                         )
                         Text(
@@ -130,6 +137,14 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
                             contentDescription = "Delete unit"
                         )
                     }
+                    Checkbox(
+                        checked = checked,
+                        onCheckedChange = {
+                            checked = it
+                            onEvent(ListItemEvent.SetChecked(checked, item.id!!))
+                        },
+                        modifier = Modifier.size(40.dp)
+                    )
                 }
                 Divider()
             }
@@ -179,7 +194,7 @@ fun AddUnitDialog(
                     placeholder = { Text(text = "Specifics") },
                 )
                 Text(
-                    text = "Dangerous: $danger",
+                    text = "Dangerous",
                 )
                 Checkbox(
                     checked = danger,
@@ -233,6 +248,9 @@ fun EditUnitDialog(
     val (selectedOption, setSelectedOption) = remember { mutableStateOf(type) }
     val strength = listOf("1","2","3","4","5")
     val (selectedStrength, setSelectedStrength) = remember { mutableStateOf(item_strength.toString()) }
+    val checked by remember {
+        mutableStateOf(state.listItems[id].isChecked)
+    }
 
     AlertDialog(
         modifier = modifier,
@@ -263,8 +281,9 @@ fun EditUnitDialog(
                     },
                     placeholder = { Text(text = "Specifics") },
                 )
+                Text(text = checked.toString())
                 Text(
-                    text = "Dangerous: $danger",
+                    text = "Dangerous",
                 )
                 Checkbox(
                     checked = danger,
@@ -362,6 +381,20 @@ fun mySpinner(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun deleteButton(
+    state: ListItemState,
+    onEvent: (ListItemEvent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(onClick = { onEvent(ListItemEvent.DeleteChecked) }) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Delete Checked"
+        )
     }
 }
 

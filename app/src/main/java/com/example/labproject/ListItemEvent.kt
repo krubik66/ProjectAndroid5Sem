@@ -8,6 +8,7 @@ sealed interface ListItemEvent {
     data class SetStrength(val strength: Float): ListItemEvent
     data class SetType(val type: String): ListItemEvent
     data class SetDanger(val danger: Boolean): ListItemEvent
+    data class SetChecked(val checked: Boolean, val id: Int): ListItemEvent
 
     object ShowDialog: ListItemEvent
     object HideDialog: ListItemEvent
@@ -19,4 +20,6 @@ sealed interface ListItemEvent {
     object ShowEditDialog: ListItemEvent
 
     data class DeleteItem(val item: DatabaseItem): ListItemEvent
+
+    object DeleteChecked: ListItemEvent
 }

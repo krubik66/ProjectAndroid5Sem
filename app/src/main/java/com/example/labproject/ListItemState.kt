@@ -9,5 +9,6 @@ data class ListItemState (
     var item_type : String = "",
     var dangerous : Boolean = false,
     var isChecked: Boolean = false,
-    var isNew: Boolean = false
+    var isNew: Boolean = false,
+    var isBeingEdited: Boolean = false
 )

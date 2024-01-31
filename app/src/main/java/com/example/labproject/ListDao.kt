@@ -22,6 +22,10 @@ interface ListDao {
     @Query("DELETE FROM item_table WHERE id = :id")
     suspend fun deleteItemWithId(id: String)
 
+
+    @Query("DELETE FROM item_table WHERE isChecked = 1")
+    suspend fun deleteChecked()
+
     @Query("SELECT * FROM item_table")
     fun getItems(): Flow<List<DatabaseItem>>
 

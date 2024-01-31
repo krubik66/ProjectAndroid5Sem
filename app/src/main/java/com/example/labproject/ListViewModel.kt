@@ -63,7 +63,7 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
             }
             ListItemEvent.ShowEditDialog -> {
                 _state.update {
-                    it.copy(isChecked = true)
+                    it.copy(isBeingEdited = true)
                 }
             }
             is ListItemEvent.EditItem -> {
@@ -96,15 +96,23 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
                         item_strength = -1f,
                         dangerous = false,
                         item_type = "",
-                        isChecked = false
+                        isChecked = false,
+                        isBeingEdited = false
                     )
                 }
             }
 
+            ListItemEvent.DeleteChecked -> {
+                viewModelScope.launch{ dao.deleteChecked() }
+            }
+
             ListItemEvent.HideEditDialog -> {
                 _state.update {
-                    it.copy(isChecked = false)
+                    it.copy(isBeingEdited = false)
                 }
+            }
+            is ListItemEvent.SetChecked -> {
+                viewModelScope.launch { dao.updateItemCheckedStatus(event.id, event.checked) }
             }
             ListItemEvent.SaveItem -> {
                 var name = state.value.text_name
@@ -134,6 +142,7 @@ class ListViewModel(private val dao: ListDao): ViewModel() {
                         item_type = "",
                         dangerous = false,
                         isChecked = false,
+                        isBeingEdited = false,
                         isNew = false,
                     )
                 }
