@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
                                 )
                         },
                         bottomBar = {
-                            BottomAppBar {
+                            NavigationBar {
                                 items.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         label = { Text(item.title) },

@@ -67,7 +67,7 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
             FloatingActionButton(onClick = {
                 onEvent(ListItemEvent.ShowDialog)
             },
-                modifier = Modifier.padding(bottom = 80.dp)
+                modifier = Modifier.padding(bottom = 20.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -76,7 +76,9 @@ fun ItemList(navController: NavController, state: ListItemState, onEvent: (ListI
             }
         },
 
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(16.dp)
+            .padding(bottom = 60.dp)
     ) { padding ->
         if(state.isNew){
             AddUnitDialog(state = state, onEvent = onEvent)
